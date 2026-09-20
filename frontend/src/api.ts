@@ -1,7 +1,13 @@
 import { PredictionResult, Location } from './types';
 import { locations } from './data';
 
-const API_ENDPOINTS = ['/api/predict', 'http://127.0.0.1:8000/api/predict'];
+const base = import.meta.env.VITE_API_BASE_URL || '';
+const API_ENDPOINTS = [
+  base ? `${base}/api/predict` : '/api/predict',
+  '/api/predict', 
+  'http://127.0.0.1:8000/api/predict',
+  'http://localhost:8000/api/predict'
+];
 
 export interface PredictApiPayload {
   latitude: number;
