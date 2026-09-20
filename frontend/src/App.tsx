@@ -82,13 +82,14 @@ function App() {
         .then(briefing => {
           setPredictionResult(prev => prev ? { ...prev, tacticalBriefing: briefing } : null);
         })
-        .catch(console.error)
+        .catch((err) => {
+          console.error(err);
+          showNotification(`Error: Could not connect to ML Backend. (If on AWS, check HTTPS Mixed Content or CORS)`);
+        })
         .finally(() => setIsBriefingLoading(false));
 
       if (triggerAudioAlert) {
         if (result.riskLevel === 'very-high' || result.riskLevel === 'high') {
-          audioFx.playAlert();
-        } else {
           audioFx.playSuccess();
         }
       }
@@ -229,6 +230,7 @@ function App() {
         })
         .catch((err) => {
           console.error(err);
+          showNotification(`Forecast Failed: Could not connect to AWS backend (Mixed Content / Network Error).`);
         })
         .finally(() => {
           setIsLoading(false);
